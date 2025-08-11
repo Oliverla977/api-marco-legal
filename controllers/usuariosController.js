@@ -1,27 +1,6 @@
 const connection = require('../config/db');
 const { body, validationResult } = require('express-validator');
 
-// Validacion al crear usuario
-exports.validateUser = [
-    body('nombre')
-      .trim()
-      .notEmpty()
-      .withMessage('El nombre es requerido')
-      .isLength({ min: 3 })
-      .withMessage('El nombre debe tener al menos 3 caracteres')
-      .matches(/^[A-Za-z]+$/)
-      .withMessage('El nombre solo puede contener letras'),
-    body('correo')
-      .trim()
-      .notEmpty()
-      .withMessage('El correo es requerido')
-      .matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-      .withMessage('Formato de correo inválido')
-      .isEmail()
-      .withMessage('Debe ser un correo válido')
-      .normalizeEmail()
-  ];
-
 exports.crearUsuario = async (req, res) => {
   try {
     // Verificar si hay errores de validación
