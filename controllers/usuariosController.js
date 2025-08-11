@@ -37,7 +37,7 @@ exports.crearUsuario = async (req, res) => {
 
     // Verficar si el usuario existe
     const [existingUsers] = await connection.query(
-      'SELECT id_usuario FROM usuario WHERE correo = ?',
+      'SELECT id_usuario FROM Usuario WHERE correo = ?',
       [correo]
     );
 
