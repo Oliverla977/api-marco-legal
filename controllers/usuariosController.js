@@ -94,3 +94,50 @@ exports.obtenerUsuarios = async (req, res) => {
   }
 };
 
+exports.deshabilitarUsuario = async (req, res) => {
+  try {
+    const { id_usuario } = req.params;
+
+    const [result] = await connection.query(
+      'CALL SP_EliminarUsuario(?)',
+      [id_usuario]
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Usuario ${id_usuario} deshabilitado correctamente`,
+      data: result
+    });
+  } catch (error) {
+    console.error('Error al deshabilitar usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al deshabilitar usuario',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};
+
+exports.habilitarUsuario = async (req, res) => {
+  try {
+    const { id_usuario } = req.params;
+
+    const [result] = await connection.query(
+      'CALL SP_HabilitarUsuario(?)',
+      [id_usuario]
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Usuario ${id_usuario} habilitado correctamente`,
+      data: result
+    });
+  } catch (error) {
+    console.error('Error al habilitar usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al habilitar usuario',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};
