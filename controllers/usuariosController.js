@@ -120,3 +120,52 @@ exports.habilitarUsuario = async (req, res) => {
     });
   }
 };
+
+// Actualizar usuario usando el procedimiento almacenado
+exports.actualizarUsuario = async (req, res) => {
+  const { id_usuario } = req.params;
+  const { correo, nombre, id_rol } = req.body;
+
+  try {
+    // Ejecutar el SP con los parámetros enviados
+    const [result] = await connection.query(
+      `CALL SP_ActualizarUsuario(?, ?, ?, ?)`,
+      [id_usuario, correo, nombre, id_rol]
+    );
+
+    // Verificar si se actualizó
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado o sin cambios' });
+    }
+
+    res.status(200).json({ mensaje: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+};
+
+exports.obtenerUsuario = async (req, res) => {
+  try {
+    const { id_usuario } = req.params;
+
+    const [result] = await connection.query(
+      'CALL SP_ConsultarUsuario(?)',
+      [id_usuario]
+    );
+    
+    const usuario = result[0];
+
+    res.status(200).json({
+      success: true,
+      data: usuario
+    });
+  } catch (error) {
+    console.error('Error al obtener usuario:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener el usuario',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};
