@@ -23,4 +23,10 @@ router.put('/habilitar/:id_empresa', empresasController.habilitarEmpresa);
 // POST /empresas/asignar-auditor → asignar un auditor a una empresa
 router.post('/asignar-auditor', empresasController.registrarEmpresaAuditor);
 
+// Obtener todos los auditores
+router.get("/auditores", empresasController.consultarAuditores);
+
+// Obtener auditores de una empresa específica
+router.get("/auditores/:id_empresa", empresasController.consultarAuditoresEmpresa);
+
 module.exports = router;

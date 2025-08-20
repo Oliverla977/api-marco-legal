@@ -199,3 +199,31 @@ exports.registrarEmpresaAuditor = async (req, res) => {
     });
   }
 };
+
+// Consultar todos los auditores (usuarios con rol = 3)
+exports.consultarAuditores = async (req, res) => {
+  try {
+    const [rows] = await connection.query("CALL SP_ConsultarAuditores()");
+    // MySQL con CALL devuelve un array doble, tomamos [0]
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error en consultarAuditores:", error);
+    res.status(500).json({ message: "Error al consultar auditores" });
+  }
+};
+
+// Consultar auditores asignados a una empresa
+exports.consultarAuditoresEmpresa = async (req, res) => {
+  try {
+    const { id_empresa } = req.params;
+
+    const [rows] = await connection.query("CALL SP_ConsultarAuditoresEmpresa(?)", [
+      id_empresa,
+    ]);
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error en consultarAuditoresEmpresa:", error);
+    res.status(500).json({ message: "Error al consultar auditores de empresa" });
+  }
+};
