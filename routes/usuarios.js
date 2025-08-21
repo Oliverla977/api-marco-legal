@@ -13,4 +13,7 @@ router.put('/actualizar/:id_usuario', usuariosController.actualizarUsuario);
 //GET /usuarios/:id_usuario obtener un usuario por id
 router.get('/:id_usuario', usuariosController.obtenerUsuario);
 
+//GET /usuarios/firebase/
+router.post('/firebase/auth', usuariosController.obtenerUsuarioFirebase);
+
 module.exports = router;

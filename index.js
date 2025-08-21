@@ -10,6 +10,7 @@ const usuariosRoutes = require('./routes/usuarios');
 const empresasRoutes = require('./routes/empresas');
 const auditorRoutes = require('./routes/auditor');
 const marcoRoutes = require('./routes/marco');
+const evaluacionRoutes = require('./routes/evaluacion');
 
 dotenv.config();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/empresas', empresasRoutes);
 app.use('/auditores', auditorRoutes);
 app.use('/marcoslegales', marcoRoutes);
+app.use('/evaluacion', evaluacionRoutes);
 
 
 app.listen(port, () => {
