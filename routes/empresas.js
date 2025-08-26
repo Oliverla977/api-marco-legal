@@ -29,4 +29,7 @@ router.get("/auditores", empresasController.consultarAuditores);
 // Obtener auditores de una empresa específica
 router.get("/auditores/:id_empresa", empresasController.consultarAuditoresEmpresa);
 
+// Obtener empresas asignadas a un auditor específico
+router.get('/auditores/:id_usuario/empresas', empresasController.consultarEmpresasAuditor);
+
 module.exports = router;

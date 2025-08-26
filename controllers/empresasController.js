@@ -227,3 +227,28 @@ exports.consultarAuditoresEmpresa = async (req, res) => {
     res.status(500).json({ message: "Error al consultar auditores de empresa" });
   }
 };
+
+// Consultar empresas asignadas a un auditor
+exports.consultarEmpresasAuditor = async (req, res) => {
+  try {
+    const { id_usuario } = req.params;
+
+    // Ejecutar la consulta (o SP si lo tienes creado)
+    const [rows] = await connection.query(
+      "SELECT id_empresa FROM Empresa_auditor WHERE id_usuario = ?",
+      [id_usuario]
+    );
+
+    res.status(200).json({
+      success: true,
+      data: rows
+    });
+
+  } catch (error) {
+    console.error("Error en consultarEmpresasAuditor:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error al consultar empresas asignadas al auditor"
+    });
+  }
+};

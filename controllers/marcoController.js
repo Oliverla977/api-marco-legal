@@ -149,8 +149,39 @@ const obtenerDetalleMarcoLegal = async (req, res) => {
   }
 };
 
+// Eliminar Marco Legal
+const eliminarMarcoLegal = async (req, res) => {
+  try {
+    const { id_marco_legal } = req.params;
+
+    // Ejecutar el SP de eliminación
+    const [result] = await connection.query(
+      'CALL SP_EliminarMarcoLegalCompleto(?);',
+      [id_marco_legal]
+    );
+
+    // El SP retorna un SELECT con el mensaje, lo capturamos
+    const mensaje = result[0][0]?.mensaje || 'Operación completada';
+
+    res.status(200).json({
+      success: true,
+      message: mensaje
+    });
+
+  } catch (error) {
+    console.error('Error al eliminar marco legal:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar marco legal',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};
+
+
 module.exports = {
   registrarMarcoLegal,
   obtenerMarcosLegales,
-  obtenerDetalleMarcoLegal
+  obtenerDetalleMarcoLegal,
+  eliminarMarcoLegal
 };
