@@ -11,5 +11,7 @@ router.post('/detalle', evaluacionController.nuevaEvaluacionDetalle);
 //GET
 router.get('/resumen/:id_empresa', evaluacionController.resumenEvaluacion);
 
+//GET informe evaluacion
+router.get('/informe/:id_evaluacion', evaluacionController.informeEvaluacion);
 
 module.exports = router;

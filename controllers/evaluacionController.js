@@ -43,11 +43,11 @@ exports.nuevaEvaluacionDetalle = async (req, res) => {
     // Procesar cada evaluacion con una transacción (opcional)
     const results = [];
     for (const detalle of detalles) {
-      const { id_evaluacion, id_articulo, id_estado, observaciones } = detalle;
+      const { id_evaluacion, id_articulo, id_estado, observaciones, evidencia } = detalle;
 
       const [result] = await connection.query(
-        'CALL SP_RegistrarEvaluacionDetalle(?, ?, ?, ?)',
-        [id_evaluacion, id_articulo, id_estado, observaciones]
+        'CALL SP_RegistrarEvaluacionDetalle(?, ?, ?, ?, ?)',
+        [id_evaluacion, id_articulo, id_estado, observaciones, evidencia]
       );
 
       results.push(result);
@@ -99,6 +99,44 @@ exports.resumenEvaluacion = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error al obtener resumen',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};
+
+// Informe de una evaluación específica
+exports.informeEvaluacion = async (req, res) => {
+  try {
+    const { id_evaluacion } = req.params;
+
+    if (!id_evaluacion) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debe enviar id_evaluacion'
+      });
+    }
+
+    // Ejecutar el stored procedure
+    const [result] = await connection.query(
+      'CALL SP_informe_evaluacion(?)',
+      [id_evaluacion]
+    );
+
+    // En MySQL los resultados de CALL vienen como un array anidado:
+    // result[0] contiene el dataset real
+    const informe = result[0];
+
+    res.status(200).json({
+      success: true,
+      message: 'Informe de evaluación obtenido correctamente',
+      data: informe
+    });
+
+  } catch (error) {
+    console.error('Error al obtener informe de evaluación:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener informe',
       error: process.env.NODE_ENV === 'local' ? error.message : undefined
     });
   }
