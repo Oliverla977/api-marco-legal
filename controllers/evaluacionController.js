@@ -141,3 +141,44 @@ exports.informeEvaluacion = async (req, res) => {
     });
   }
 };
+
+//Resumen de evalucion especifica
+exports.resumenEvaluacionEspecifica = async (req, res) => {
+  try {
+    const { id_evaluacion } = req.params;
+
+    if (!id_evaluacion) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debe enviar id_evaluacion'
+      });
+    }
+
+    // Ejecutar el stored procedure
+    const [rows] = await connection.query(
+      'CALL SP_ResumenEvaluacionEspecifica(?)',
+      [id_evaluacion]
+    );
+
+    //console.log("Resultado crudo de MySQL:", JSON.stringify(rows, null, 2));
+
+    // Tomar la primera fila del primer recordset
+    const informe = rows[0] || null;
+
+    res.status(200).json({
+      success: true,
+      message: 'Resumen de evaluación obtenido correctamente',
+      data: informe
+    });
+
+    //console.log("Informe final:", informe);
+
+  } catch (error) {
+    console.error('Error al obtener informe de evaluación:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener informe',
+      error: process.env.NODE_ENV === 'local' ? error.message : undefined
+    });
+  }
+};

@@ -14,4 +14,7 @@ router.get('/resumen/:id_empresa', evaluacionController.resumenEvaluacion);
 //GET informe evaluacion
 router.get('/informe/:id_evaluacion', evaluacionController.informeEvaluacion);
 
+//GET informe evaluacion detalle
+router.get('/resumenespecifico/:id_evaluacion', evaluacionController.resumenEvaluacionEspecifica);
+
 module.exports = router;
