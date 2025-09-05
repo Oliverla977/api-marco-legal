@@ -32,5 +32,5 @@ app.use('/dashboard', dashboardRoutes);
 
 
 app.listen(port, () => {
-  console.log(`Servidor corriendo`);
+  console.log(`Servidor online`);
 });
